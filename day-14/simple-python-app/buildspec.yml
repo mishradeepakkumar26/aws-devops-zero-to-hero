@@ -14,11 +14,19 @@ phases:
       - cd day-14/simple-python-app/
       - echo "Building Docker image..."
       - docker build -t "simple-python-flask-app:latest" .
-      - docker save -o simple-python-flask-app.tar "$simple-python-flask-app:latest"
-      - aws s3 cp simple-python-flask-app.tar s3://bansal-cicd/simple-python-flask-app.tar
+
   post_build:
     commands:
       - echo "Build completed successfully!"
+      - echo "Build completed successfully!"
+      - echo "Saving Docker image to GitHub repository..."
+      - echo "Logging in to Docker Hub..."
+      - echo "<your_docker_hub_password>" | docker login --username <your_docker_hub_username> --password-stdin
+      - echo "Tagging Docker image..."
+      - docker tag simple-python-flask-app:latest <your_docker_hub_username>/simple-python-flask-app:latest
+      - echo "Pushing Docker image to Docker Hub..."
+      - docker push <your_docker_hub_username>/simple-python-flask-app:latest
+
 artifacts:
   files:
     - '**/*'
